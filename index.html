@@ -1,0 +1,1261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MATH Lectures Studio</title>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%2360a5fa'%3E%3Cpath d='M12 3c-4.97 0-9 4.03-9 9v7c0 1.1.9 2 2 2h2v-7H5v-2c0-3.87 3.13-7 7-7s7 3.13 7 7v2h-2v7h2c1.1 0 2-.9 2-2v-7c0-4.97-4.03-9-9-9z'/%3E%3Cpath d='M12 6c-3.31 0-6 2.69-6 6v1h12v-1c0-3.31-2.69-6-6-6z'/%3E%3C/svg%3E">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-gradient: linear-gradient(135deg, #0f172a 0%, #1e3a8a 50%, #020617 100%);
+            --glass-bg: rgba(30, 41, 59, 0.55);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --glass-highlight: rgba(96, 165, 250, 0.2);
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --accent-blue: #3b82f6;
+            --accent-glow: #60a5fa;
+            --accent-purple: #a855f7;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        body {
+            background: var(--bg-gradient);
+            background-attachment: fixed;
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+            padding-bottom: 90px;
+        }
+
+        .ambient-glow-1 {
+            position: fixed;
+            top: -10%;
+            left: -10%;
+            width: 55vw;
+            height: 55vw;
+            background: radial-gradient(circle, rgba(29, 78, 216, 0.3) 0%, rgba(0,0,0,0) 70%);
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .ambient-glow-2 {
+            position: fixed;
+            bottom: -10%;
+            right: -10%;
+            width: 60vw;
+            height: 60vw;
+            background: radial-gradient(circle, rgba(14, 116, 144, 0.25) 0%, rgba(0,0,0,0) 70%);
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        header {
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--glass-border);
+            padding: 1.25rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .logo-icon {
+            width: 2.25rem;
+            height: 2.25rem;
+            color: var(--accent-glow);
+            filter: drop-shadow(0 0 8px rgba(96, 165, 250, 0.5));
+        }
+
+        .logo-text {
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: -0.04em;
+            background: linear-gradient(to right, #ffffff, #93c5fd);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .tagline {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            font-weight: 400;
+        }
+
+        .main-container {
+            max-width: 1400px;
+            width: 100%;
+            margin: 2rem auto;
+            padding: 0 2rem;
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 2rem;
+            flex: 1;
+        }
+
+        .glass-panel {
+            background: var(--glass-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--glass-border);
+            border-radius: 1.25rem;
+            padding: 1.5rem;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        }
+
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            height: fit-content;
+            position: sticky;
+            top: 6rem;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.6rem;
+        }
+
+        .filter-label {
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--text-muted);
+        }
+
+        .search-box {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 0.75rem 1rem 0.75rem 2.5rem;
+            background: rgba(15, 23, 42, 0.7);
+            border: 1px solid var(--glass-border);
+            border-radius: 0.75rem;
+            color: var(--text-main);
+            font-size: 0.95rem;
+            transition: all 0.25s ease;
+        }
+
+        .search-box input:focus {
+            outline: none;
+            border-color: var(--accent-glow);
+            box-shadow: 0 0 12px var(--glass-highlight);
+        }
+
+        .search-box svg {
+            position: absolute;
+            left: 0.75rem;
+            width: 1.25rem;
+            height: 1.25rem;
+            color: var(--text-muted);
+        }
+
+        .filter-select {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            background: rgba(15, 23, 42, 0.7);
+            border: 1px solid var(--glass-border);
+            border-radius: 0.75rem;
+            color: var(--text-main);
+            font-size: 0.95rem;
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2394a3b8'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 0.75rem center;
+            background-size: 1.25rem;
+        }
+
+        .filter-select:focus {
+            outline: none;
+            border-color: var(--accent-glow);
+        }
+
+        .content-area {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .results-stats {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .podcast-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .podcast-card {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            position: relative;
+            overflow: hidden;
+            border: 1px solid var(--glass-border);
+        }
+
+        .podcast-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(96, 165, 250, 0.4);
+            box-shadow: 0 12px 35px 0 rgba(0, 0, 0, 0.45);
+            background: rgba(30, 41, 59, 0.75);
+        }
+
+        .podcast-card.is-playing {
+            border-color: var(--accent-glow);
+            box-shadow: 0 0 25px rgba(96, 165, 250, 0.25);
+        }
+
+        .media-type-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+            padding: 0.25rem 0.6rem;
+            border-radius: 2rem;
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .badge-audio {
+            background: rgba(59, 130, 246, 0.2);
+            color: #93c5fd;
+            border: 1px solid rgba(59, 130, 246, 0.4);
+        }
+
+        .podcast-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-bottom: 0.75rem;
+        }
+
+        .podcast-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            line-height: 1.35;
+            margin-bottom: 0.75rem;
+            color: var(--text-main);
+            transition: color 0.2s ease;
+        }
+
+        .podcast-card:hover .podcast-title {
+            color: var(--accent-glow);
+        }
+
+        .markdown-desc {
+            font-size: 0.9rem;
+            line-height: 1.6;
+            color: var(--text-muted);
+            overflow: hidden;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            margin-bottom: 1rem;
+        }
+
+        .markdown-content p {
+            margin-bottom: 0.75rem;
+        }
+        .markdown-content p:last-child {
+            margin-bottom: 0;
+        }
+        .markdown-content strong {
+            color: #ffffff;
+            font-weight: 600;
+        }
+        .markdown-content em {
+            color: #cbd5e1;
+            font-style: italic;
+        }
+        .markdown-content a {
+            color: #60a5fa;
+            text-decoration: underline;
+        }
+        .markdown-content ul, .markdown-content ol {
+            margin-left: 1.25rem;
+            margin-bottom: 0.75rem;
+        }
+        .markdown-content code {
+            background: rgba(15, 23, 42, 0.7);
+            padding: 0.15rem 0.35rem;
+            border-radius: 0.25rem;
+            font-family: monospace;
+            font-size: 0.85rem;
+            color: #f472b6;
+        }
+
+        .card-footer {
+            margin-top: auto;
+            padding-top: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .duration {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .card-actions {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .fullscreen-btn {
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid var(--glass-border);
+            color: var(--text-muted);
+            width: 2.25rem;
+            height: 2.25rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .fullscreen-btn:hover {
+            background: rgba(255, 255, 255, 0.15);
+            color: #ffffff;
+            transform: scale(1.08);
+        }
+
+        .play-btn {
+            background: var(--accent-blue);
+            color: white;
+            border: none;
+            padding: 0.5rem 1.1rem;
+            border-radius: 2rem;
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+        }
+
+        .play-btn:hover {
+            background: #2563eb;
+            transform: scale(1.05);
+            box-shadow: 0 4px 16px rgba(59, 130, 246, 0.5);
+        }
+
+        .play-btn.playing {
+            background: var(--accent-purple);
+            box-shadow: 0 4px 12px rgba(168, 85, 247, 0.4);
+        }
+
+        .player-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(15, 23, 42, 0.85);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border-top: 1px solid var(--glass-border);
+            padding: 0.85rem 2rem;
+            z-index: 100;
+            display: grid;
+            grid-template-columns: 280px 1fr 240px;
+            align-items: center;
+            gap: 1.5rem;
+            transform: translateY(100%);
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            box-shadow: 0 -10px 40px rgba(0,0,0,0.6);
+        }
+
+        .player-bar.active {
+            transform: translateY(0);
+        }
+
+        .now-playing {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            overflow: hidden;
+        }
+
+        .now-playing-thumb {
+            width: 3.25rem;
+            height: 3.25rem;
+            border-radius: 0.6rem;
+            background: rgba(30, 41, 59, 0.8);
+            border: 1px solid var(--glass-border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            overflow: hidden;
+        }
+
+        .now-playing-info {
+            display: flex;
+            flex-direction: column;
+            gap: 0.2rem;
+            overflow: hidden;
+        }
+
+        .now-playing-title {
+            font-weight: 600;
+            font-size: 0.95rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            color: var(--text-main);
+        }
+
+        .now-playing-meta {
+            font-size: 0.78rem;
+            color: var(--text-muted);
+        }
+
+        .player-controls {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.4rem;
+            width: 100%;
+            max-width: 650px;
+            margin: 0 auto;
+        }
+
+        .control-buttons {
+            display: flex;
+            align-items: center;
+            gap: 1.25rem;
+        }
+
+        .audio-icon-btn {
+            background: none;
+            border: none;
+            color: var(--text-main);
+            cursor: pointer;
+            width: 2.25rem;
+            height: 2.25rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: background 0.2s, color 0.2s, transform 0.2s;
+        }
+
+        .audio-icon-btn:hover {
+            background: rgba(255,255,255,0.1);
+            color: var(--accent-glow);
+        }
+
+        .audio-icon-btn.main-play {
+            background: var(--text-main);
+            color: #0f172a;
+            width: 2.75rem;
+            height: 2.75rem;
+            box-shadow: 0 0 12px rgba(255,255,255,0.3);
+        }
+
+        .audio-icon-btn.main-play:hover {
+            background: var(--accent-glow);
+            color: #0f172a;
+            transform: scale(1.08);
+        }
+
+        .progress-container {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            font-variant-numeric: tabular-nums;
+        }
+
+        .progress-bar-bg {
+            flex: 1;
+            height: 6px;
+            background: rgba(255,255,255,0.12);
+            border-radius: 3px;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, var(--accent-blue), var(--accent-glow));
+            border-radius: 3px;
+            transition: width 0.1s linear;
+        }
+
+        .extra-controls {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 1rem;
+        }
+
+        .volume-container {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            width: 110px;
+        }
+
+        .volume-slider {
+            flex: 1;
+            accent-color: var(--accent-glow);
+            cursor: pointer;
+            height: 4px;
+        }
+
+        .expand-player-btn {
+            background: rgba(255,255,255,0.08);
+            border: 1px solid var(--glass-border);
+            color: var(--text-main);
+            padding: 0.4rem 0.8rem;
+            border-radius: 0.5rem;
+            font-size: 0.8rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            transition: background 0.2s;
+        }
+
+        .expand-player-btn:hover {
+            background: rgba(255,255,255,0.18);
+        }
+
+        /* Fullscreen Modal & Interactive Transcript Panel */
+        .fullscreen-modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(2, 6, 23, 0.92);
+            backdrop-filter: blur(28px);
+            -webkit-backdrop-filter: blur(28px);
+            z-index: 200;
+            display: flex;
+            flex-direction: column;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+            overflow-y: auto;
+        }
+
+        .fullscreen-modal.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 2.5rem;
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .close-modal-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: var(--text-main);
+            width: 2.75rem;
+            height: 2.75rem;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s, transform 0.2s;
+        }
+
+        .close-modal-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: scale(1.05);
+        }
+
+        .modal-body {
+            max-width: 1100px;
+            width: 100%;
+            margin: 2rem auto;
+            padding: 0 2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            flex: 1;
+        }
+
+        .media-stage {
+            width: 100%;
+            border-radius: 1.25rem;
+            overflow: hidden;
+            background: #000000;
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7);
+            height: 220px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .audio-stage-visual {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            text-align: center;
+            padding: 2rem;
+            background: radial-gradient(circle, rgba(30, 58, 138, 0.5) 0%, rgba(15, 23, 42, 0.9) 100%);
+            width: 100%;
+            height: 100%;
+        }
+
+        .audio-stage-icon {
+            width: 4rem;
+            height: 4rem;
+            color: var(--accent-glow);
+            filter: drop-shadow(0 0 20px rgba(96, 165, 250, 0.6));
+            animation: pulse-glow 3s infinite ease-in-out;
+        }
+
+        @keyframes pulse-glow {
+            0%, 100% { transform: scale(1); filter: drop-shadow(0 0 20px rgba(96, 165, 250, 0.6)); }
+            50% { transform: scale(1.08); filter: drop-shadow(0 0 35px rgba(96, 165, 250, 0.9)); }
+        }
+
+        /* View Tabs for Modal */
+        .modal-tabs {
+            display: flex;
+            gap: 1rem;
+            border-bottom: 1px solid var(--glass-border);
+            padding-bottom: 0.5rem;
+        }
+
+        .tab-btn {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-size: 1rem;
+            font-weight: 600;
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            border-radius: 0.5rem;
+            transition: all 0.2s ease;
+        }
+
+        .tab-btn.active {
+            color: var(--text-main);
+            background: rgba(96, 165, 250, 0.15);
+            border: 1px solid var(--glass-border);
+        }
+
+        .modal-details {
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+        }
+
+        .modal-title {
+            font-size: 1.8rem;
+            font-weight: 800;
+            line-height: 1.25;
+            color: var(--text-main);
+        }
+
+        .modal-meta-row {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        .modal-description {
+            font-size: 1.05rem;
+            line-height: 1.7;
+            color: #cbd5e1;
+            background: rgba(30, 41, 59, 0.4);
+            border: 1px solid var(--glass-border);
+            border-radius: 1rem;
+            padding: 1.75rem;
+        }
+
+        /* Transcript Scroll Container */
+        .transcript-container {
+            background: rgba(15, 23, 42, 0.8);
+            border: 1px solid var(--glass-border);
+            border-radius: 1rem;
+            padding: 1.75rem;
+            max-height: 380px;
+            overflow-y: auto;
+            font-size: 1.05rem;
+            line-height: 1.8;
+            color: #e2e8f0;
+            white-space: pre-wrap;
+            box-shadow: inset 0 2px 10px rgba(0,0,0,0.5);
+        }
+
+        .speed-selector {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .speed-btn {
+            background: rgba(255,255,255,0.06);
+            border: 1px solid var(--glass-border);
+            color: var(--text-muted);
+            padding: 0.25rem 0.6rem;
+            border-radius: 0.4rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .speed-btn.active, .speed-btn:hover {
+            background: var(--accent-blue);
+            color: #ffffff;
+            border-color: var(--accent-blue);
+        }
+
+        @media (max-width: 900px) {
+            .main-container {
+                grid-template-columns: 1fr;
+            }
+            .sidebar {
+                position: relative;
+                top: 0;
+            }
+            .player-bar {
+                grid-template-columns: 1fr auto;
+                gap: 1rem;
+                padding: 0.85rem 1rem;
+            }
+            .now-playing-thumb, .extra-controls {
+                display: none;
+            }
+            .modal-title {
+                font-size: 1.4rem;
+            }
+            .modal-body {
+                padding: 0 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="ambient-glow-1"></div>
+    <div class="ambient-glow-2"></div>
+
+    <header>
+        <div class="logo-container">
+            <svg class="logo-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 2C6.48 2 2 6.48 2 12v5c0 1.1.9 2 2 2h3v-8H4v-1c0-4.41 3.59-8 8-8s8 3.59 8 8v1h-3v8h3c1.1 0 2-.9 2-2v-5c0-5.52-4.48-10-10-10z"/>
+                <path d="M12 6c-3.31 0-6 2.69-6 6v1h12v-1c0-3.31-2.69-6-6-6z"/>
+            </svg>
+            <div>
+                <div class="logo-text">MATH Studio</div>
+                <div class="tagline">Professional Audio Lectures Hub</div>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-container">
+        <aside class="sidebar glass-panel">
+            <div class="filter-group">
+                <label class="filter-label">Search Lectures</label>
+                <div class="search-box">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin='round' stroke-width='2' d='M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z' />
+                    </svg>
+                    <input type="text" id="searchInput" placeholder="Search title or notes...">
+                </div>
+            </div>
+
+            <div class="filter-group">
+                <label class="filter-label">Category Filter</label>
+                <select id="categoryFilter" class="filter-select">
+                    <option value="all">All Categories</option>
+                    <option value="computer science">Computer Science</option>
+                    <option value="physics">Physics</option>
+                    <option value="mathematics">Mathematics</option>
+                </select>
+            </div>
+
+            <div class="filter-group">
+                <label class="filter-label">Sort Order</label>
+                <select id="sortOrder" class="filter-select">
+                    <option value="newest">Newest First</option>
+                    <option value="oldest">Oldest First</option>
+                </select>
+            </div>
+        </aside>
+
+        <section class="content-area">
+            <div class="results-stats">
+                <span id="resultsStats">Loading lectures...</span>
+            </div>
+
+            <div class="podcast-grid" id="podcastGrid"></div>
+        </section>
+    </main>
+
+    <audio id="globalAudioPlayer" style="display: none;"></audio>
+
+    <div class="player-bar" id="playerBar">
+        <div class="now-playing">
+            <div class="now-playing-thumb" id="playerBarThumb">
+                <svg width="24" height="24" fill="currentColor" viewBox="0 0 24 24" class="logo-icon"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg>
+            </div>
+            <div class="now-playing-info">
+                <div class="now-playing-title" id="trackTitle">Select a lecture</div>
+                <div class="now-playing-meta" id="trackMeta">Lectures Studio</div>
+            </div>
+        </div>
+
+        <div class="player-controls">
+            <div class="control-buttons">
+                <button class="audio-icon-btn" title="Rewind 10s" onclick="seekRelative(-10)">
+                    <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M12 5V1L7 6l5 5V7c3.31 0 6 2.69 6 6s-2.69 6-6 6-6-2.69-6-6H4c0 4.42 3.58 8 8 8s8-3.58 8-8-3.58-8-8-8z"/><text x="9.5" y="15.5" font-size="7" font-weight="bold">10</text></svg>
+                </button>
+
+                <button class="audio-icon-btn main-play" id="globalPlayBtn" title="Play/Pause">
+                    <svg width="24" height="24" fill="currentColor" viewBox="0 0 24 24" id="globalPlayIcon"><path d="M8 5v14l11-7z"/></svg>
+                </button>
+
+                <button class="audio-icon-btn" title="Forward 10s" onclick="seekRelative(10)">
+                    <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M12 5V1l5 5-5 5V7c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6h2c0 4.42-3.58 8-8 8s-8-3.58-8-8 3.58-8 8-8z"/><text x="9.5" y="15.5" font-size="7" font-weight="bold">10</text></svg>
+                </button>
+            </div>
+
+            <div class="progress-container">
+                <span id="currentTimeStr">0:00</span>
+                <div class="progress-bar-bg" id="progressBarBg" onclick="handleSeekClick(event)">
+                    <div class="progress-bar-fill" id="progressBarFill"></div>
+                </div>
+                <span id="totalDurationStr">0:00</span>
+            </div>
+        </div>
+
+        <div class="extra-controls">
+            <div class="speed-selector">
+                <button class="speed-btn active" onclick="setPlaybackSpeed(1, this)">1x</button>
+                <button class="speed-btn" onclick="setPlaybackSpeed(1.25, this)">1.25x</button>
+                <button class="speed-btn" onclick="setPlaybackSpeed(1.5, this)">1.5x</button>
+            </div>
+
+            <div class="volume-container">
+                <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/></svg>
+                <input type="range" class="volume-slider" id="volumeSlider" min="0" max="1" step="0.05" value="0.8" oninput="handleVolumeChange(this.value)">
+            </div>
+
+            <button class="expand-player-btn" onclick="openFullscreenModalCurrent()">
+                <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"/></svg>
+                Fullscreen
+            </button>
+        </div>
+    </div>
+
+    <div class="fullscreen-modal" id="fullscreenModal">
+        <div class="modal-header">
+            <div class="logo-container">
+                <svg class="logo-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 2C6.48 2 2 6.48 2 12v5c0 1.1.9 2 2 2h3v-8H4v-1c0-4.41 3.59-8 8-8s8 3.59 8 8v1h-3v8h3c1.1 0 2-.9 2-2v-5c0-5.52-4.48-10-10-10z"/>
+                </svg>
+                <span class="logo-text">Now Playing</span>
+            </div>
+            <button class="close-modal-btn" onclick="closeFullscreenModal()" title="Close Fullscreen View">
+                <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+            </button>
+        </div>
+
+        <div class="modal-body">
+            <div class="media-stage" id="modalMediaStage">
+                <div class="audio-stage-visual">
+                    <svg class="audio-stage-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 2C6.48 2 2 6.48 2 12v5c0 1.1.9 2 2 2h3v-8H4v-1c0-4.41 3.59-8 8-8s8 3.59 8 8v1h-3v8h3c1.1 0 2-.9 2-2v-5c0-5.52-4.48-10-10-10z"/>
+                    </svg>
+                    <h2 id="modalAudioTitle">Lecture Playback</h2>
+                </div>
+            </div>
+
+            <div class="modal-details">
+                <div class="modal-meta-row">
+                    <span class="media-type-badge badge-audio">Audio</span>
+                    <span id="modalCategory">Computer Science</span>
+                    <span>&bull;</span>
+                    <span id="modalAuthor">Lecturer</span>
+                    <span>&bull;</span>
+                    <span id="modalDate">2026</span>
+                </div>
+
+                <h1 class="modal-title" id="modalTitle">Lecture Title</h1>
+
+                <div class="modal-tabs">
+                    <button class="tab-btn active" id="tabNotesBtn" onclick="switchModalTab('notes')">Overview & Notes</button>
+                    <button class="tab-btn" id="tabTranscriptBtn" onclick="switchModalTab('transcript')">Full Transcript</button>
+                </div>
+
+                <div class="modal-description markdown-content" id="modalDescription"></div>
+
+                <div class="transcript-container" id="modalTranscript" style="display: none;"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    function parseMarkdown(text) {
+        if (!text) return '';
+        let html = text
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;');
+
+        html = html.replace(/^### (.*$)/gim, '<h3>$1</h3>');
+        html = html.replace(/^## (.*$)/gim, '<h2>$1</h2>');
+        html = html.replace(/^# (.*$)/gim, '<h1>$1</h1>');
+        html = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+        html = html.replace(/\*(.*?)\*/g, '<em>$1</em>');
+        html = html.replace(/`(.*?)`/g, '<code>$1</code>');
+        html = html.replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>');
+
+        const lines = html.split('\n\n');
+        return lines.map(line => {
+            if (line.trim().startsWith('<h')) return line;
+            return `<p>${line.replace(/\n/g, '<br>')}</p>`;
+        }).join('');
+    }
+
+    const fallbackPodcastsData = [
+        {
+            "id": "1",
+            "title": "Introduction to Quantum Computing",
+            "category": "physics",
+            "date": "2026-08-10",
+            "duration": "05:30",
+            "author": "Prof. Richard Feynman",
+            "file": "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
+            "type": "audio",
+            "description": "# Quantum Physics Overview\n\nIn this lecture, we discuss **superposition** and **entanglement**.",
+            "transcript": "[00:00] Welcome to Introduction to Quantum Computing."
+        }
+    ];
+
+    let podcastsList = [];
+    let currentTrack = null;
+    let isPlaying = false;
+    let activeMediaElement = document.getElementById('globalAudioPlayer');
+
+    async function initPodcastsHub() {
+        try {
+            const response = await fetch('podcasts.json');
+            if (!response.ok) throw new Error('Podcasts JSON fetch failed');
+            const rawData = await response.json();
+
+            podcastsList = rawData.map((item, index) => ({
+                id: String(item.id || index + 1),
+                title: item.title || 'Untitled Item',
+                category: item.category || 'general',
+                date: item.date || new Date().toISOString().split('T')[0],
+                duration: item.duration || '--:--',
+                author: item.author || 'Lecturer',
+                file: item.file || item.url || '',
+                type: item.type || 'audio', // Dynamically loads media type
+                description: item.description || 'No description provided.',
+                transcript: item.transcript || 'No transcript available.'
+            }));
+        } catch (error) {
+            console.warn('Using fallback lecture data:', error);
+            podcastsList = fallbackPodcastsData;
+        }
+
+        renderPodcastsFeed();
+        setupMediaEventListeners();
+    }
+
+    function renderPodcastsFeed() {
+        const grid = document.getElementById('podcastGrid');
+        const searchVal = document.getElementById('searchInput').value.toLowerCase();
+        const catVal = document.getElementById('categoryFilter').value;
+        const sortVal = document.getElementById('sortOrder').value;
+
+        let filtered = podcastsList.filter(item => {
+            const matchesSearch = item.title.toLowerCase().includes(searchVal) ||
+                                  item.description.toLowerCase().includes(searchVal) ||
+                                  item.author.toLowerCase().includes(searchVal);
+            const matchesCategory = (catVal === 'all' || item.category.toLowerCase() === catVal);
+            return matchesSearch && matchesCategory;
+        });
+
+        filtered.sort((a, b) => {
+            const dateA = new Date(a.date);
+            const dateB = new Date(b.date);
+            return sortVal === 'newest' ? dateB - dateA : dateA - dateB;
+        });
+
+        document.getElementById('resultsStats').innerText = `Showing ${filtered.length} available item(s)`;
+        grid.innerHTML = '';
+
+        if (filtered.length === 0) {
+            grid.innerHTML = `<div style="grid-column: 1/-1; text-align: center; padding: 4rem; color: var(--text-muted);">No media found matching your criteria.</div>`;
+            return;
+        }
+
+        filtered.forEach(podcast => {
+            const isCurrentPlaying = currentTrack && currentTrack.id === podcast.id && isPlaying;
+            const card = document.createElement('div');
+            card.className = `podcast-card glass-panel ${isCurrentPlaying ? 'is-playing' : ''}`;
+
+            card.innerHTML = `
+                <div class="podcast-meta">
+                    <span class="media-type-badge badge-${podcast.type}">${podcast.type.toUpperCase()}</span>
+                    <span>${podcast.date}</span>
+                </div>
+                <h3 class="podcast-title">${podcast.title}</h3>
+                <div class="markdown-desc markdown-content">
+                    ${parseMarkdown(podcast.description)}
+                </div>
+                <div class="card-footer">
+                    <span class="duration">${podcast.duration}</span>
+                    <div class="card-actions">
+                        <button class="fullscreen-btn" title="View Details" onclick="openFullscreenModal('${podcast.id}')">
+                            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"/></svg>
+                        </button>
+                        ${podcast.type !== 'image' ? `
+                            <button class="play-btn ${isCurrentPlaying ? 'playing' : ''}" onclick="togglePlayTrack('${podcast.id}')">
+                                <svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="${isCurrentPlaying ? 'M6 19h4V5H6v14zm8-14v14h4V5h-4z' : 'M8 5v14l11-7z'}"/>
+                                </svg>
+                                <span>${isCurrentPlaying ? 'Pause' : 'Play'}</span>
+                            </button>
+                        ` : ''}
+                    </div>
+                </div>
+            `;
+            grid.appendChild(card);
+        });
+    }
+
+    function togglePlayTrack(id) {
+        const podcast = podcastsList.find(p => p.id === id);
+        if (!podcast || podcast.type === 'image') return;
+
+        if (currentTrack && currentTrack.id === id) {
+            isPlaying ? pauseMedia() : playMedia();
+        } else {
+            loadAndPlayTrack(podcast);
+        }
+    }
+
+    function loadAndPlayTrack(podcast) {
+        currentTrack = podcast;
+        document.getElementById('playerBar').classList.add('active');
+        document.getElementById('trackTitle').innerText = podcast.title;
+        document.getElementById('trackMeta').innerText = `${podcast.author} • ${podcast.category.toUpperCase()}`;
+
+        if (podcast.type === 'audio' || podcast.type === 'video') {
+            activeMediaElement.src = podcast.file;
+            activeMediaElement.load();
+            playMedia();
+        }
+        renderPodcastsFeed();
+    }
+
+    function playMedia() {
+        if (!activeMediaElement || !activeMediaElement.src) return;
+        activeMediaElement.play()
+            .then(() => { isPlaying = true; updatePlaybackUI(); })
+            .catch(() => { isPlaying = false; updatePlaybackUI(); });
+    }
+
+    function pauseMedia() {
+        if (activeMediaElement) activeMediaElement.pause();
+        isPlaying = false;
+        updatePlaybackUI();
+    }
+
+    function updatePlaybackUI() {
+        const playIcon = document.getElementById('globalPlayIcon');
+        if (playIcon) {
+            playIcon.innerHTML = isPlaying
+                ? `<path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>`
+                : `<path d="M8 5v14l11-7z"/>`;
+        }
+        renderPodcastsFeed();
+    }
+
+    function setupMediaEventListeners() {
+        if (!activeMediaElement) return;
+        activeMediaElement.ontimeupdate = handleTimeUpdate;
+        activeMediaElement.onended = () => { isPlaying = false; updatePlaybackUI(); };
+    }
+
+    function handleTimeUpdate() {
+        const cur = activeMediaElement.currentTime || 0;
+        const dur = activeMediaElement.duration || 0;
+
+        document.getElementById('currentTimeStr').innerText = formatTime(cur);
+        document.getElementById('totalDurationStr').innerText = dur ? formatTime(dur) : (currentTrack ? currentTrack.duration : '0:00');
+
+        const pct = dur > 0 ? (cur / dur) * 100 : 0;
+        document.getElementById('progressBarFill').style.width = `${pct}%`;
+    }
+
+    function handleSeekClick(e) {
+        if (!activeMediaElement || !activeMediaElement.duration) return;
+        const bar = document.getElementById('progressBarBg');
+        const rect = bar.getBoundingClientRect();
+        const clickX = e.clientX - rect.left;
+        activeMediaElement.currentTime = (clickX / rect.width) * activeMediaElement.duration;
+    }
+
+    function seekRelative(seconds) {
+        if (!activeMediaElement) return;
+        activeMediaElement.currentTime = Math.max(0, (activeMediaElement.currentTime || 0) + seconds);
+    }
+
+    function handleVolumeChange(val) {
+        if (activeMediaElement) activeMediaElement.volume = parseFloat(val);
+    }
+
+    function setPlaybackSpeed(speed, btnEl) {
+        if (activeMediaElement) activeMediaElement.playbackRate = speed;
+        document.querySelectorAll('.speed-btn').forEach(b => b.classList.remove('active'));
+        if (btnEl) btnEl.classList.add('active');
+    }
+
+    function formatTime(seconds) {
+        const mins = Math.floor(seconds / 60);
+        const secs = Math.floor(seconds % 60);
+        return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+    }
+
+    function openFullscreenModal(id) {
+        const podcast = podcastsList.find(p => p.id === id);
+        if (!podcast) return;
+
+        if (podcast.type !== 'image' && (!currentTrack || currentTrack.id !== id)) {
+            loadAndPlayTrack(podcast);
+        }
+
+        setupModalContent(podcast);
+        document.getElementById('fullscreenModal').classList.add('active');
+    }
+
+    function setupModalContent(podcast) {
+        document.getElementById('modalTitle').innerText = podcast.title;
+        document.getElementById('modalCategory').innerText = podcast.category.toUpperCase();
+        document.getElementById('modalAuthor').innerText = podcast.author;
+        document.getElementById('modalDate').innerText = podcast.date;
+
+        let mediaDisplay = parseMarkdown(podcast.description);
+
+        // Render dynamic viewer inside modal depending on item type
+        if (podcast.type === 'video') {
+            mediaDisplay = `
+                <div style="margin-bottom: 1.5rem;">
+                    <video controls autoplay style="width: 100%; max-height: 400px; border-radius: 8px;">
+                        <source src="${podcast.file}">
+                    </video>
+                </div>
+            ` + mediaDisplay;
+        } else if (podcast.type === 'image') {
+            mediaDisplay = `
+                <div style="margin-bottom: 1.5rem; text-align: center;">
+                    <img src="${podcast.file}" alt="${podcast.title}" style="max-width: 100%; max-height: 500px; border-radius: 8px;" />
+                </div>
+            ` + mediaDisplay;
+        }
+
+        document.getElementById('modalDescription').innerHTML = mediaDisplay;
+        document.getElementById('modalTranscript').innerText = podcast.transcript;
+
+        switchModalTab('notes');
+    }
+
+    function switchModalTab(tabName) {
+        const notesEl = document.getElementById('modalDescription');
+        const transcriptEl = document.getElementById('modalTranscript');
+        const tabNotesBtn = document.getElementById('tabNotesBtn');
+        const tabTranscriptBtn = document.getElementById('tabTranscriptBtn');
+
+        if (tabName === 'transcript') {
+            notesEl.style.display = 'none';
+            transcriptEl.style.display = 'block';
+            tabNotesBtn.classList.remove('active');
+            tabTranscriptBtn.classList.add('active');
+        } else {
+            notesEl.style.display = 'block';
+            transcriptEl.style.display = 'none';
+            tabNotesBtn.classList.add('active');
+            tabTranscriptBtn.classList.remove('active');
+        }
+    }
+
+    function closeFullscreenModal() {
+        document.getElementById('fullscreenModal').classList.remove('active');
+    }
+
+    document.getElementById('globalPlayBtn').onclick = () => isPlaying ? pauseMedia() : playMedia();
+    document.getElementById('searchInput').oninput = renderPodcastsFeed;
+    document.getElementById('categoryFilter').onchange = renderPodcastsFeed;
+    document.getElementById('sortOrder').onchange = renderPodcastsFeed;
+
+    window.onload = initPodcastsHub;
+</script>
+</body>
+</html>
