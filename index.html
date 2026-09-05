@@ -1209,15 +1209,27 @@
         let mediaDisplay = parseMarkdown(podcast.description);
 
         if (podcast.type === 'video') {
-            // Convert Google Drive view/uc links into preview links for iframe embed
-            let embedUrl = podcast.file;
-            if (embedUrl.includes('drive.google.com')) {
-                embedUrl = embedUrl.replace(/\/view.*$/, '/preview').replace(/\/uc\?.*id=/, '/file/d/') + '/preview';
+            let fileId = '';
+
+            // Extract the Drive File ID from various URL patterns
+            const match = podcast.file.match(/(?:id=|\/d\/|\/file\/d\/)([\w-]+)/);
+            if (match && match[1]) {
+                fileId = match[1];
             }
 
+            // Construct direct embedded player URL
+            const embedUrl = fileId
+                ? `https://drive.google.com/file/d/${fileId}/preview`
+                : podcast.file;
+
             mediaDisplay = `
-                <div style="margin-bottom: 1.5rem; position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 8px;">
-                    <iframe src="${embedUrl}" style="position: absolute; top:0; left:0; width:100%; height:100%; border:0;" allow="autoplay" allowfullscreen></iframe>
+                <div style="margin-bottom: 1.5rem; position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 8px; background: #000;">
+                    <iframe
+                        src="${embedUrl}"
+                        style="position: absolute; top:0; left:0; width:100%; height:100%; border:0;"
+                        allow="autoplay; encrypted-media; picture-in-picture"
+                        allowfullscreen>
+                    </iframe>
                 </div>
             ` + mediaDisplay;
         } else if (podcast.type === 'image') {
